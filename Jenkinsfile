@@ -49,7 +49,7 @@ pipeline {
                         credentialsId: '176295807911'
                     ]]) {
                     sh "aws ecs update-service --region us-east-1 --cluster Nodejs --service nodeapp-service"
-                    sh "aws ecs update-service --region us-east-1 --cluster ${env.CLUSTER_NAME} --service ${env.SERVICE_NAME}"
+                  //  sh "aws ecs update-service --region us-east-1 --cluster ${env.CLUSTER_NAME} --service ${env.SERVICE_NAME}"
                 }
             }
         }     
