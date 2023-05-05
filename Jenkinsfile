@@ -48,16 +48,19 @@ pipeline {
             }
         }
     }
-
-    stage('Deploy') {
-     steps{
-            withAWS(credentials: registryCredential, region: "${AWS_DEFAULT_REGION}") {
-                script {
-			sh './script.sh'
+    stage("Update ECS service") {
+        steps {
+               withCredentials([[
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                        secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
+                        credentialsId: '176295807911'
+                    ]]) {
+                    sh "aws ecs update-service --region us-east-1 --cluster Nodejs --service nodeapp-service"
+                    sh "aws ecs update-service --region us-east-1 --cluster ${env.CLUSTER_NAME} --service ${env.SERVICE_NAME}"
                 }
-            } 
-        }
-      }      
+            }
+        }     
       
     }
 }
