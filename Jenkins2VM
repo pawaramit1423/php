@@ -8,7 +8,7 @@ pipeline {
           def azureVmUser = 'cicd'
           def azureVmAppDir = '/var/www/app'
 
-          sshagent(['your-ssh-credentials']) {
+          sshagent(['azurevmcicd']) {
             sh "scp -r . ${azureVmUser}@${azureVmIp}:${azureVmAppDir}"
             sh "ssh ${azureVmUser}@${azureVmIp} 'cd ${azureVmAppDir} && composer install'"
           }
