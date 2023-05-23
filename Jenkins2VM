@@ -1,0 +1,25 @@
+pipeline {
+  agent any
+  stages {
+    stage('Checkout') {
+      steps {
+        git 'https://github.com/pawaramit1423/php'
+      }
+    }
+
+    stage('Deploy to Azure VM') {
+      steps {
+        script {
+          def azureVmIp = '20.40.49.192'
+          def azureVmUser = 'cicd'
+          def azureVmAppDir = '/var/www/app'
+
+          sshagent(['your-ssh-credentials']) {
+            sh "scp -r . ${azureVmUser}@${azureVmIp}:${azureVmAppDir}"
+            sh "ssh ${azureVmUser}@${azureVmIp} 'cd ${azureVmAppDir} && composer install'"
+          }
+        }
+      }
+    }
+  }
+}
